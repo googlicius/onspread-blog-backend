@@ -32,15 +32,18 @@
       "required": false,
       "pluginOptions": {}
     },
-    "slug": {
-      "type": "string"
-    },
     "category": {
       "model": "category"
     },
     "user": {
       "plugin": "users-permissions",
       "model": "user"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
     }
   }
 }
