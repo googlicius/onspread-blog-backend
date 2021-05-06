@@ -1,0 +1,54 @@
+# This is a CD workflow to runs build, zip the artifacts and upload to s3.
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  delivery:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-lastest]
+        node-version: [14.x]
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Configure AWS Credentials Action For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Generate local environment file
+        env:
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          DATABASE_SRV: ${{ secrets.DATABASE_SRV }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_SSL: ${{ secrets.DATABASE_SSL }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCESS_SECRET: ${{ secrets.AWS_ACCESS_SECRET }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+        run: |
+          chmod +x .github/scripts/prod.env.sh
+          ./.github/scripts/prod.env.sh
+
+      - name: Zip the API artifacts and upload to S3
+        if: contains(steps.build.outputs.hasApiDist, 'true') && success()
+        run: |
+          zip -qq -r artifacts.zip .
+          aws s3 cp ./artifacts.zip s3://onspreadblogdeploymentstack-sourcebucket-l1t1np2lff1e
