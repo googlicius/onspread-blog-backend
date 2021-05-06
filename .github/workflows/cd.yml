@@ -50,4 +50,4 @@ jobs:
       - name: Zip the API artifacts and upload to S3
         run: |
           zip -qq -r artifacts.zip .
-          aws s3 cp ./artifacts.zip s3://onspreadblogdeploymentstack-sourcebucket-l1t1np2lff1e
+          aws s3 cp ./artifacts.zip s3://${{ secrets.SOURCE_BUCKET }}
