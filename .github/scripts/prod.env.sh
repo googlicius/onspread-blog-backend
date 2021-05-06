@@ -1,5 +1,7 @@
 #!/bin/bash
 cat > .env <<EOF
+NODE_ENV=production
+
 # DATABASE
 DATABASE_HOST=$DATABASE_HOST
 DATABASE_SRV=$DATABASE_SRV
