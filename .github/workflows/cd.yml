@@ -47,7 +47,7 @@ jobs:
           chmod +x .github/scripts/prod.env.sh
           ./.github/scripts/prod.env.sh
 
-      - name: Zip the API artifacts and upload to S3
+      - name: Zip as the artifacts and upload to S3
         run: |
           zip -qq -r artifacts.zip .
           aws s3 cp ./artifacts.zip s3://${{ secrets.SOURCE_BUCKET }}

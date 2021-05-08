@@ -48,6 +48,10 @@
     "heart": {
       "type": "integer",
       "default": 0
+    },
+    "homeFeatured": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

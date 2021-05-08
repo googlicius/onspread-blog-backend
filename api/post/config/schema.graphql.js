@@ -14,6 +14,11 @@ module.exports = {
     Get specific post by its slug
     """
     postBySlug(slug: String!): Post
+
+    """
+    Get featured post
+    """
+    featuredPost: Post
   `,
   mutation: `
     """
@@ -32,6 +37,14 @@ module.exports = {
           });
         },
       },
+      featuredPost: {
+        resolverOf: 'application::post.post.findOne',
+        resolver() {
+          return strapi.services.post.findOne({
+            homeFeatured: true,
+          });
+        },
+      }
     },
     Mutation: {
       giveHeart: {

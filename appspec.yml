@@ -1,4 +1,4 @@
-# This file provide instruction for Codedeploy Agent perform deployment on its instance.
+# This file provides instruction for Codedeploy Agent perform deployment on its EC2 instance.
 
 version: 0.0
 os: linux
