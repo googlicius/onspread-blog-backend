@@ -11,6 +11,8 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^27.1.0",
+    "@ckeditor/ckeditor5-react": "^3.0.2",
     "joi": "^17.4.0",
     "knex": "0.21.18",
     "slugify": "^1.5.0",

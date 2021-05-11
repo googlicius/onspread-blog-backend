@@ -52,6 +52,14 @@
     "homeFeatured": {
       "type": "boolean",
       "default": false
+    },
+    "contentType": {
+      "type": "enumeration",
+      "enum": [
+        "Markdown",
+        "Html"
+      ],
+      "default": "Markdown"
     }
   }
 }
