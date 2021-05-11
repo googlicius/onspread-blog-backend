@@ -16,6 +16,7 @@ const Wysiwyg = ({
   value,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [ckEditor, setCkEditor] = useState(null);
   let spacer = !isEmpty(inputDescription) ? (
     <div style={{ height: '.4rem' }} />
   ) : (
@@ -28,16 +29,31 @@ const Wysiwyg = ({
 
   const handleChange = (data) => {
     if (data.mime.includes('image')) {
-      const imgTag = `<p><img src="${data.url}" caption="${data.caption}" alt="${data.alternativeText}"></img></p>`;
-      const newValue = value ? `${value}${imgTag}` : imgTag;
+      ckEditor.model.change((writer) => {
+        const imageElement = writer.createElement('image', {
+          src: data.url,
+          alt: data.alternativeText,
+        });
 
-      onChange({ target: { name, value: newValue } });
+        ckEditor.model.insertContent(
+          imageElement,
+          ckEditor.model.document.selection,
+        );
+      });
     }
 
     // Handle videos and other type of files by adding some code
   };
 
   const handleToggle = () => setIsOpen((prev) => !prev);
+
+  const handleEditorReady = (editor) => {
+    setCkEditor(editor);
+
+    if (value) {
+      editor.setData(value);
+    }
+  };
 
   return (
     <div
@@ -48,12 +64,37 @@ const Wysiwyg = ({
       }}
     >
       <Label htmlFor={name} message={label} style={{ marginBottom: 10 }} />
-      <div>
-        <Button color="primary" onClick={handleToggle}>
-          MediaLib
-        </Button>
-      </div>
-      <Editor name={name} onChange={onChange} value={value} />
+
+      <Editor
+        name={name}
+        config={{
+          toolbar: [
+            'heading',
+            '|',
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'numberedList',
+            '|',
+            'indent',
+            'outdent',
+            '|',
+            'blockQuote',
+            'insertTable',
+            'mediaEmbed',
+            'insertImage',
+            'undo',
+            'redo',
+          ],
+          insertImage: {
+            openStrapiMediaLib: handleToggle,
+          },
+        }}
+        onReady={handleEditorReady}
+        onChange={onChange}
+        data={value}
+      />
       <InputDescription
         message={inputDescription}
         style={!isEmpty(inputDescription) ? { marginTop: '1.4rem' } : {}}

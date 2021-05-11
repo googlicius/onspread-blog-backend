@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import styled from 'styled-components';
+import StrapiAdminEditor from '../../ckeditor5-build-strapi-admin';
 
 const Wrapper = styled.div`
   .ck-editor__main {
@@ -13,65 +13,26 @@ const Wrapper = styled.div`
   }
 `;
 
-const configuration = {
-  toolbar: [
-    'heading',
-    '|',
-    'bold',
-    'italic',
-    'link',
-    'bulletedList',
-    'numberedList',
-    '|',
-    'indent',
-    'outdent',
-    '|',
-    'blockQuote',
-    'insertTable',
-    'mediaEmbed',
-    'undo',
-    'redo',
-  ],
-};
-
-const Editor = ({ onChange, name, value }) => {
-  const handleReady = (editor) => {
-    console.log('>>>>>>>HANDLE READY', editor);
-    // editor.addCommand('mySimpleCommand', {
-    //   exec: function (edt) {
-    //     alert(edt.getData());
-    //   },
-    // });
-    // editor.ui.addButton('SuperButton', {
-    //   label: 'Click me',
-    //   command: 'mySimpleCommand',
-    //   toolbar: 'insert',
-    //   icon: 'https://avatars1.githubusercontent.com/u/5500999?v=2&s=16',
-    // });
-    if (value) {
-      editor.setData(value);
-    }
-  };
+const Editor = React.forwardRef(({ onChange, name, data, ...rest }, ref) => {
   return (
     <Wrapper>
       <CKEditor
-        editor={ClassicEditor}
-        config={configuration}
-        data={value}
-        onReady={handleReady}
+        ref={ref}
+        editor={StrapiAdminEditor}
         onChange={(event, editor) => {
-          const data = editor.getData();
-          onChange({ target: { name, value: data } });
+          const newData = editor.getData();
+          onChange({ target: { name, value: newData } });
         }}
+        {...rest}
       />
     </Wrapper>
   );
-};
+});
 
 Editor.propTypes = {
   onChange: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string,
+  data: PropTypes.string,
 };
 
 export default Editor;

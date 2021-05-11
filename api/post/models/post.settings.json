@@ -59,7 +59,7 @@
         "Markdown",
         "Html"
       ],
-      "default": "Markdown"
+      "default": "Html"
     }
   }
 }
