@@ -23,13 +23,8 @@ hooks:
       timeout: 10
       runas: ec2-user
 
-  Install:
-    - location: .aws/codedeploy-scripts/install-dependencies.sh
-      timeout: 1200
-      runas: ec2-user
-
   AfterInstall:
-    - location: .aws/codedeploy-scripts/build.sh
+    - location: .aws/codedeploy-scripts/install-dependencies.sh
       timeout: 1200
       runas: ec2-user
 
