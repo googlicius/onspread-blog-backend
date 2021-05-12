@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import styled from 'styled-components';
-import StrapiAdminEditor from '../../ckeditor5-build-strapi-admin';
+import StrapiAdminEditor from '../ckeditor5-build-strapi-admin';
 
 const Wrapper = styled.div`
   .ck-editor__main {
@@ -13,13 +13,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const Editor = React.forwardRef(({ onChange, name, data, ...rest }, ref) => {
+const Editor = React.forwardRef(({ onChange, name, ...rest }, ref) => {
   return (
     <Wrapper>
       <CKEditor
         ref={ref}
         editor={StrapiAdminEditor}
-        onChange={(event, editor) => {
+        onChange={(_, editor) => {
           const newData = editor.getData();
           onChange({ target: { name, value: newData } });
         }}

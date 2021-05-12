@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
-import { Button } from '@buffetjs/core';
 import { Label, InputDescription, InputErrors } from 'strapi-helper-plugin';
-import Editor from '../CKEditor';
-import MediaLib from '../MediaLib';
+import Editor from './CKEditor';
+import MediaLib from './MediaLib';
 
 const Wysiwyg = ({
   inputDescription,
@@ -68,25 +67,6 @@ const Wysiwyg = ({
       <Editor
         name={name}
         config={{
-          toolbar: [
-            'heading',
-            '|',
-            'bold',
-            'italic',
-            'link',
-            'bulletedList',
-            'numberedList',
-            '|',
-            'indent',
-            'outdent',
-            '|',
-            'blockQuote',
-            'insertTable',
-            'mediaEmbed',
-            'insertImage',
-            'undo',
-            'redo',
-          ],
           insertImage: {
             openStrapiMediaLib: handleToggle,
           },
