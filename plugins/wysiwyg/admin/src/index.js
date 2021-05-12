@@ -20,7 +20,6 @@ export default (strapi) => {
     injectedComponents: [],
     isReady: true,
     isRequired: pluginPkg.strapi.required || false,
-    // layout: null,
     lifecycles,
     mainComponent: null,
     name,
