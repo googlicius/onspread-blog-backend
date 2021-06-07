@@ -60,6 +60,16 @@
         "Html"
       ],
       "default": "Html"
+    },
+    "displayType": {
+      "type": "enumeration",
+      "enum": [
+        "WithImage",
+        "FullscreenImage",
+        "NoImage"
+      ],
+      "default": "WithImage",
+      "required": false
     }
   }
 }

@@ -3,12 +3,13 @@ const { BaseRedisCache } = require('apollo-server-cache-redis');
 const Redis = require('ioredis');
 
 // set this to whatever you believe should be the max age for your cache control
-const MAX_AGE = 60;
+const MAX_AGE = +(process.env.APOLLO_SERVER_CACHE_MAXAGE || 60);
+const TTL = +(process.env.APOLLO_SERVER_PERSISTED_QUERIES_TTL || 10);
 
 module.exports = {
   federation: false,
   apolloServer: {
-    persistedQueries: { ttl: 10 * MAX_AGE },
+    persistedQueries: { ttl: TTL * MAX_AGE },
     cacheControl: { defaultMaxAge: MAX_AGE },
     plugins: [
       apolloServerPluginResponseCache({
