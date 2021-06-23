@@ -2,6 +2,7 @@
 
 const Joi = require('joi');
 const { getService } = require('strapi-plugin-content-manager/utils');
+const { APOLLO_SERVER_CACHE_MAXAGE } = require('../../../utils/env');
 
 const giveHeartValidationSchema = Joi.object({
   postId: Joi.allow(),
@@ -11,7 +12,6 @@ const giveHeartValidationSchema = Joi.object({
 const model = 'application::post.post';
 
 module.exports = {
-  definition: ``,
   query: `
     """
     Get specific post by its slug
@@ -78,10 +78,7 @@ module.exports = {
         resolverOf: 'plugins::content-manager.collection-types.publish',
         async resolver(_parent, options) {
           const entityManager = getService('entity-manager');
-          const entity = await entityManager.findOneWithCreatorRoles(
-            options.id,
-            model,
-          );
+          const entity = await entityManager.findOneWithCreatorRoles(options.id, model);
           const result = await entityManager.publish(entity, model);
           return result;
         },
@@ -90,10 +87,7 @@ module.exports = {
         resolverOf: 'plugins::content-manager.collection-types.unpublish',
         async resolver(_parent, options) {
           const entityManager = getService('entity-manager');
-          const entity = await entityManager.findOneWithCreatorRoles(
-            options.id,
-            model,
-          );
+          const entity = await entityManager.findOneWithCreatorRoles(options.id, model);
           const result = await entityManager.unpublish(entity, model);
           return result;
         },
