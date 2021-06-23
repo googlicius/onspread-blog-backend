@@ -2,7 +2,7 @@ const apolloServerPluginResponseCache = require('apollo-server-plugin-response-c
 const { BaseRedisCache } = require('apollo-server-cache-redis');
 const Redis = require('ioredis');
 const cookie = require('cookie');
-const jwtDecode = require('jwt-decode');
+const jwt = require('jsonwebtoken');
 
 const { APOLLO_SERVER_PERSISTED_QUERIES_TTL, APOLLO_SERVER_CACHE_MAXAGE } = require('../../../utils/env');
 
@@ -34,7 +34,7 @@ async function sessionId(requestContext) {
 
   if (typeof cc === 'string') {
     const parsedCookie = cookie.parse(cc);
-    const jwtDecoded = parsedCookie.token && jwtDecode(parsedCookie.token);
+    const jwtDecoded = parsedCookie.token && jwt.decode(parsedCookie.token);
 
     if (jwtDecoded) {
       return jwtDecoded.id || null;
