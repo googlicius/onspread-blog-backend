@@ -70,6 +70,12 @@
       ],
       "default": "WithImage",
       "required": false
+    },
+    "story": {
+      "model": "story"
+    },
+    "storySeq": {
+      "type": "float"
     }
   }
 }

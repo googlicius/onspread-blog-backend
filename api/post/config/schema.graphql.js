@@ -2,7 +2,6 @@
 
 const Joi = require('joi');
 const { getService } = require('strapi-plugin-content-manager/utils');
-const { APOLLO_SERVER_CACHE_MAXAGE } = require('../../../utils/env');
 
 const giveHeartValidationSchema = Joi.object({
   postId: Joi.allow(),
@@ -12,6 +11,14 @@ const giveHeartValidationSchema = Joi.object({
 const model = 'application::post.post';
 
 module.exports = {
+  definition: `
+    extend type Post {
+      """
+      Next post of series.
+      """
+      nextPost: Post
+    }
+  `,
   query: `
     """
     Get specific post by its slug
@@ -41,6 +48,23 @@ module.exports = {
   `,
   type: {},
   resolver: {
+    Post: {
+      nextPost: {
+        resolverOf: 'application::post.post.findOne',
+        resolver(parent) {
+          if (parent.story) {
+            return strapi.query('post').findOne({
+              _sort: 'storySeq:asc',
+              _where: {
+                story: parent.story,
+                storySeq_gt: parent.storySeq,
+              },
+            });
+          }
+          return null;
+        },
+      },
+    },
     Query: {
       postBySlug: {
         resolverOf: 'application::post.post.findOne',

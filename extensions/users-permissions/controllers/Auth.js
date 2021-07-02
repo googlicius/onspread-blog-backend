@@ -4,9 +4,7 @@ const { sanitizeEntity } = require('strapi-utils');
 
 const emailRegExp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const formatError = (error) => [
-  { messages: [{ id: error.id, message: error.message, field: error.field }] },
-];
+const formatError = (error) => [{ messages: [{ id: error.id, message: error.message, field: error.field }] }];
 
 module.exports = {
   async callback(ctx) {
@@ -59,9 +57,7 @@ module.exports = {
       }
 
       // Check if the user exists.
-      const user = await strapi
-        .query('user', 'users-permissions')
-        .findOne(query);
+      const user = await strapi.query('user', 'users-permissions').findOne(query);
 
       if (!user) {
         return ctx.badRequest(
@@ -73,10 +69,7 @@ module.exports = {
         );
       }
 
-      if (
-        _.get(await store.get({ key: 'advanced' }), 'email_confirmation') &&
-        user.confirmed !== true
-      ) {
+      if (_.get(await store.get({ key: 'advanced' }), 'email_confirmation') && user.confirmed !== true) {
         return ctx.badRequest(
           null,
           formatError({
@@ -108,9 +101,10 @@ module.exports = {
         );
       }
 
-      const validPassword = await strapi.plugins[
-        'users-permissions'
-      ].services.user.validatePassword(params.password, user.password);
+      const validPassword = await strapi.plugins['users-permissions'].services.user.validatePassword(
+        params.password,
+        user.password,
+      );
 
       if (!validPassword) {
         return ctx.badRequest(
@@ -128,6 +122,7 @@ module.exports = {
         ctx.cookies.set('token', token, {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Day Age
+          domain: process.env.COOKIE_DOMAIN,
         });
 
         ctx.send({
@@ -150,9 +145,7 @@ module.exports = {
       // Connect the user with the third-party provider.
       let user, error;
       try {
-        [user, error] = await strapi.plugins[
-          'users-permissions'
-        ].services.providers.connect(provider, ctx.query);
+        [user, error] = await strapi.plugins['users-permissions'].services.providers.connect(provider, ctx.query);
       } catch ([user, error]) {
         return ctx.badRequest(null, error === 'array' ? error[0] : error);
       }
@@ -172,7 +165,9 @@ module.exports = {
     }
   },
   logout(ctx) {
-    ctx.cookies.set('token', null);
+    ctx.cookies.set('token', null, {
+      domain: process.env.COOKIE_DOMAIN,
+    });
     ctx.send({
       authorized: true,
       message: 'Logged out.',
