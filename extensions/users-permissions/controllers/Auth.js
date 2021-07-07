@@ -123,6 +123,7 @@ module.exports = {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Day Age
           domain: process.env.COOKIE_DOMAIN,
+          sameSite: 'Lax',
         });
 
         ctx.send({
@@ -167,6 +168,7 @@ module.exports = {
   logout(ctx) {
     ctx.cookies.set('token', null, {
       domain: process.env.COOKIE_DOMAIN,
+      sameSite: 'Lax',
     });
     ctx.send({
       authorized: true,
