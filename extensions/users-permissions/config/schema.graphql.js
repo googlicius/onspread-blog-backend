@@ -20,6 +20,8 @@ module.exports = {
   `,
   resolver: {
     Query: {
+      // Adds cache scope to PRIVATE on me query.
+      // NOTE: Modifying cacheControl at resolver level is NOT desired. Strapi Graphql has no way to add cacheControl directive in schema.
       me: {
         resolverOf: 'plugins::users-permissions.user.me',
         async resolver(_obj, _options, { context }, info) {

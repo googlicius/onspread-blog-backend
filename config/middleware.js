@@ -6,5 +6,8 @@ module.exports = {
     cors: {
       origin,
     },
+    poweredBy: {
+      enabled: false,
+    },
   },
 };
