@@ -9,7 +9,14 @@ function generateSlug(data) {
 }
 
 async function removeOldHomeFeaturedPost(data) {
-  if (data.homeFeatured === true || !!data.published_at) {
+  if (data.homeFeatured === true) {
+    if (data._id) {
+      const post = await strapi.services.post.findOne({ _id: data._id });
+      if (!post.published_at) {
+        return;
+      }
+    }
+
     const postDoc = await strapi.services.post.findOne({
       homeFeatured: true,
       _id: { $ne: data._id },
