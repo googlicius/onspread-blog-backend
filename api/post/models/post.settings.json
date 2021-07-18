@@ -76,6 +76,9 @@
     },
     "storySeq": {
       "type": "float"
+    },
+    "tags": {
+      "collection": "tag"
     }
   }
 }
