@@ -1,5 +1,30 @@
 'use strict';
 
+const origin = process.env.CORS_ORIGIN.split(',').map((url) => url.trim());
+
+function initSocketIO() {
+  const io = require('socket.io')(strapi.server, {
+    cors: {
+      origin,
+      methods: ['GET', 'POST'],
+      allowedHeaders: ['my-custom-header'],
+      credentials: true,
+    },
+  });
+
+  io.on('connection', function (socket) {
+    socket.on('join', ({ userId }, cb) => {
+      socket.join(userId);
+
+      if (cb) {
+        cb(`User ${userId} joined.`);
+      }
+    });
+  });
+
+  strapi.io = io;
+}
+
 /**
  * An asynchronous bootstrap function that runs before
  * your application gets started.
@@ -10,4 +35,6 @@
  * See more details here: https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/configurations.html#bootstrap
  */
 
-module.exports = () => {};
+module.exports = () => {
+  initSocketIO();
+};

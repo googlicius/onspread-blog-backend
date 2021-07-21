@@ -1,0 +1,51 @@
+{
+  "kind": "collectionType",
+  "collectionName": "notifications",
+  "info": {
+    "name": "Notification",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "channel": {
+      "type": "enumeration",
+      "enum": [
+        "PostCommented",
+        "UserRegistered",
+        "UserRegistrationFailed"
+      ],
+      "required": true
+    },
+    "isVisible": {
+      "type": "boolean",
+      "default": false
+    },
+    "readAt": {
+      "type": "datetime"
+    },
+    "new": {
+      "type": "boolean",
+      "default": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}
