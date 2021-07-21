@@ -44,6 +44,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
           CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
+          APOLLO_SERVER_CACHE_MAXAGE: ${{ secrets.APOLLO_SERVER_CACHE_MAXAGE }}
         run: |
           chmod +x .github/scripts/prod.env.sh
           ./.github/scripts/prod.env.sh
