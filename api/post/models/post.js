@@ -1,6 +1,7 @@
 'use strict';
 
 const slugify = require('slugify');
+const { notificationEvent, CHANNEL } = require('../../notification/config/notification-events');
 
 function generateSlug(data) {
   if (data.title) {
@@ -28,6 +29,14 @@ async function removeOldHomeFeaturedPost(data) {
   }
 }
 
+async function markPostJustPublished(params, data) {
+  const post = await strapi.models.post.findOne({ _id: params._id });
+  if (data.published_at && post.isNewPost !== false) {
+    data.isNewPost = false;
+    data.justPublished = true;
+  }
+}
+
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#lifecycle-hooks)
  * to customize this model
@@ -39,9 +48,11 @@ module.exports = {
       generateSlug(data);
       await removeOldHomeFeaturedPost(data);
     },
-    beforeUpdate: async (_params, data) => {
-      // generateSlug(data);
-      await removeOldHomeFeaturedPost(data);
+    beforeUpdate: async (params, data) => {
+      await Promise.all([markPostJustPublished(params, data), removeOldHomeFeaturedPost(data)]);
+    },
+    afterUpdate: (post, params, data) => {
+      notificationEvent.emit(CHANNEL.PostUpdated, post, params, data);
     },
   },
 };

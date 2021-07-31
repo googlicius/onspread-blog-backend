@@ -16,16 +16,10 @@ function initSocketIO() {
     socket.on('join', ({ userId }, cb) => {
       socket.join(userId);
 
-      // console.log(`Socket ${socket.id} joined room ${userId}.`);
-
       if (cb) {
         cb(`User ${userId} joined.`);
       }
     });
-
-    // socket.on('disconnect', () => {
-    //   console.log('disconnect', socket.id);
-    // })
   });
 
   strapi.io = io;

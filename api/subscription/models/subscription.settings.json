@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "subscriptions",
+  "info": {
+    "name": "subscription",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "collectionName": {
+      "type": "enumeration",
+      "enum": [
+        "story",
+        "post",
+        "comment"
+      ],
+      "required": true
+    },
+    "collectionId": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

@@ -32,6 +32,13 @@
     "user": {
       "plugin": "users-permissions",
       "model": "user"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "publishing",
+        "completed"
+      ]
     }
   }
 }

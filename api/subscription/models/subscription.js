@@ -1,6 +1,6 @@
 'use strict';
 
-const { notificationEvent, CHANNEL } = require('../../notification/config/notification-events')
+const { subscriptionCreateEventSchema } = require('../config/validation-schema');
 
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#lifecycle-hooks)
@@ -9,8 +9,8 @@ const { notificationEvent, CHANNEL } = require('../../notification/config/notifi
 
 module.exports = {
   lifecycles: {
-    afterCreate: async (result) => {
-      notificationEvent.emit(CHANNEL.PostCommented, result);
-    }
-  }
+    beforeCreate: async (data) => {
+      await subscriptionCreateEventSchema.validateAsync(data);
+    },
+  },
 };

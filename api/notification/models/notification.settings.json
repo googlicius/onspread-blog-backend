@@ -24,6 +24,7 @@
       "type": "enumeration",
       "enum": [
         "PostCommented",
+        "PostUpdated",
         "UserRegistered",
         "UserRegistrationFailed"
       ],

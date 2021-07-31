@@ -79,6 +79,10 @@
     },
     "tags": {
       "collection": "tag"
+    },
+    "isNewPost": {
+      "type": "boolean",
+      "default": true
     }
   }
 }
