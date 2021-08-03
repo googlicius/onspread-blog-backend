@@ -58,6 +58,7 @@ module.exports = {
               _where: {
                 story: parent.story,
                 storySeq_gt: parent.storySeq,
+                published_at_null: false,
               },
             });
           }

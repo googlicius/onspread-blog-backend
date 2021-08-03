@@ -2,6 +2,7 @@
 
 const slugify = require('slugify');
 const { notificationEvent, CHANNEL } = require('../../notification/config/notification-events');
+const { postSaveValidationSchema } = require('../config/validation-schema');
 
 function generateSlug(data) {
   if (data.title) {
@@ -45,10 +46,14 @@ async function markPostJustPublished(params, data) {
 module.exports = {
   lifecycles: {
     beforeCreate: async (data) => {
+      await postSaveValidationSchema.validateAsync(data);
+
       generateSlug(data);
       await removeOldHomeFeaturedPost(data);
     },
     beforeUpdate: async (params, data) => {
+      await postSaveValidationSchema.validateAsync(data);
+
       await Promise.all([markPostJustPublished(params, data), removeOldHomeFeaturedPost(data)]);
     },
     afterUpdate: (post, params, data) => {
